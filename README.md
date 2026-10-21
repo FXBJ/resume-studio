@@ -5,6 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
 [![Dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)]()
+[![CI](https://github.com/FXBJ/resume-studio/actions/workflows/ci.yml/badge.svg)](https://github.com/FXBJ/resume-studio/actions/workflows/ci.yml)
 
 用自然语言描述你的经历，它产出**可直接投递的一页 PDF**。内置六套按行业大类划分的模板、
 事实保真闸门、反 AI 味体检，全部零第三方依赖。
