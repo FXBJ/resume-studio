@@ -141,14 +141,8 @@ def render_header(data: dict, theme: dict) -> tuple[str, list[str]]:
             notes.append("主题开启了头像位，但未提供 photo——填入本地图片路径或 base64 即可显示")
 
     # --- 关键事实条：年龄 / 经验 / 学历 / 到岗状态 ---
-    # 注意：嵌套 f-string 的表达式部分不能含反斜杠（Python < 3.12 会 SyntaxError），
-    # 所以 HTML 属性统一用单引号。
     facts = [str(f).strip() for f in (meta.get("facts") or []) if str(f).strip()]
-    facts_html = (
-        f'<div class="facts">{"".join(f"<span class=\'fact\'>{esc(f)}</span>" for f in facts)}</div>'
-        if facts
-        else ""
-    )
+    facts_html = f'<div class="facts">{_spans(facts, "fact")}</div>' if facts else ""
 
     # --- 联系方式 ---
     contact = meta.get("contact") or {}
@@ -221,14 +215,24 @@ def render_skills(data: dict, theme: dict) -> str:
     )
 
 
+def _spans(items, cls: str) -> str:
+    """生成一串 `<span class="cls">value</span>`。
+
+    单独抽成函数而不用嵌套 f-string，原因有两个：
+    1. Python 3.12 之前，f-string 表达式部分不能含反斜杠；
+    2. 三层引号嵌套（外 ' 中 " 内 '）对旧版 tokenizer 不友好。
+    抽成函数后两者都绕开了，代码也更好读。
+    """
+    return "".join(f'<span class="{cls}">{esc(v)}</span>' for v in items)
+
+
 def _tags_html(tags) -> str:
     if not tags:
         return ""
     items = [str(t).strip() for t in tags if str(t).strip()]
     if not items:
         return ""
-    # 单引号属性：避免嵌套 f-string 表达式含反斜杠（Python < 3.12 不支持）
-    return f'<div class="tags">{"".join(f"<span class=\'tag\'>{esc(t)}</span>" for t in items)}</div>'
+    return f'<div class="tags">{_spans(items, "tag")}</div>'
 
 
 def _entry_block(org, title, meta_line, bullets, location="", extra="", tags=None) -> str:
