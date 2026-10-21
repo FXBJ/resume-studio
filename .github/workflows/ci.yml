@@ -16,6 +16,24 @@ jobs:
         with:
           python-version: "3.9"
 
+      - name: Python 3.9 语法兼容性
+        run: |
+          # 项目声明支持 3.9+。用 ast.feature_version 提前拦截版本相关语法，
+          # 例如「f-string 表达式含反斜杠」在 3.12 之前是 SyntaxError，
+          # 在开发者本机的高版本 Python 上却完全正常——只有显式检查才能发现。
+          python3 - <<'PY'
+          import ast, pathlib, sys
+          ok = True
+          for p in sorted(pathlib.Path("scripts").glob("*.py")):
+              try:
+                  ast.parse(p.read_text(encoding="utf-8"), feature_version=(3, 9))
+                  print(f"  ✓ {p.name}")
+              except SyntaxError as e:
+                  ok = False
+                  print(f"  ✗ {p.name}: {e}")
+          sys.exit(0 if ok else 1)
+          PY
+
       - name: 零依赖校验（仅允许标准库导入）
         run: |
           echo "检查 scripts/ 下的 import："

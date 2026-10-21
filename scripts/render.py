@@ -141,9 +141,11 @@ def render_header(data: dict, theme: dict) -> tuple[str, list[str]]:
             notes.append("主题开启了头像位，但未提供 photo——填入本地图片路径或 base64 即可显示")
 
     # --- 关键事实条：年龄 / 经验 / 学历 / 到岗状态 ---
+    # 注意：嵌套 f-string 的表达式部分不能含反斜杠（Python < 3.12 会 SyntaxError），
+    # 所以 HTML 属性统一用单引号。
     facts = [str(f).strip() for f in (meta.get("facts") or []) if str(f).strip()]
     facts_html = (
-        f'<div class="facts">{"".join(f"<span class=\"fact\">{esc(f)}</span>" for f in facts)}</div>'
+        f'<div class="facts">{"".join(f"<span class=\'fact\'>{esc(f)}</span>" for f in facts)}</div>'
         if facts
         else ""
     )
@@ -225,7 +227,8 @@ def _tags_html(tags) -> str:
     items = [str(t).strip() for t in tags if str(t).strip()]
     if not items:
         return ""
-    return f'<div class="tags">{"".join(f"<span class=\"tag\">{esc(t)}</span>" for t in items)}</div>'
+    # 单引号属性：避免嵌套 f-string 表达式含反斜杠（Python < 3.12 不支持）
+    return f'<div class="tags">{"".join(f"<span class=\'tag\'>{esc(t)}</span>" for t in items)}</div>'
 
 
 def _entry_block(org, title, meta_line, bullets, location="", extra="", tags=None) -> str:
