@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>张示例 · 简历</title>
+<style>
+:root{
+  --accent:#0f62fe; --accent-soft:#e8f0ff;
+  --ink:#16181d; --muted:#5c6470; --rule:#d8dce3;
+  --fs:10.50pt; --lh:1.62;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:#fff;}
+body{
+  font-family:-apple-system, "PingFang SC", "STHeiti", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+  font-size:var(--fs); line-height:var(--lh);
+  color:var(--ink); -webkit-font-smoothing:antialiased;
+}
+@page{size:A4;margin:0;}
+.page{
+  width:210mm; min-height:297mm; margin:0 auto;
+  padding:16mm 17mm 14mm; background:#fff;
+}
+
+/* ---------- 头部 ---------- */
+.hd{display:flex;gap:13px;align-items:flex-start;padding-bottom:14px;border-bottom:2px solid var(--accent);}
+.photo{width:23mm;height:31mm;object-fit:cover;
+  border-radius:2mm;flex:none;background:var(--accent-soft);}
+.hd-main{flex:1;min-width:0;}
+.hd-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;}
+.name{font-size:calc(var(--fs)*2.05);font-weight:700;margin:0;letter-spacing:.02em;line-height:1.1;}
+.facts{display:flex;flex-wrap:wrap;gap:2px 8px;font-size:calc(var(--fs)*0.9);color:var(--muted);}
+.fact{white-space:nowrap;}
+.fact + .fact::before{content:"·";margin-right:8px;color:var(--rule);}
+.headline{font-size:calc(var(--fs)*1.12);color:var(--accent);font-weight:600;margin:4px 0 3px;}
+.target{font-size:calc(var(--fs)*0.94);color:var(--muted);margin:0 0 4px;}
+.t-label{color:var(--accent);font-weight:600;margin-right:4px;}
+.contact{display:flex;flex-wrap:wrap;gap:2px 14px;font-size:calc(var(--fs)*0.92);color:var(--muted);}
+/* ---------- 栏目 ---------- */
+.sec{margin-top:14px;counter-increment:sec;}
+.sec>h2{
+  font-size:calc(var(--fs)*1.06);font-weight:700;margin:0 0 7px;
+  background:#0f62fe;color:#fff;padding:2.5px 8px;border-radius:2px;display:inline-block;
+}
+.summary{margin:0;text-align:justify;}
+/* ---------- 条目 ---------- */
+.entry{margin-bottom:8px;}
+.entry:last-child{margin-bottom:0;}
+.e-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;}
+.e-title{font-weight:700;font-size:calc(var(--fs)*1.03);}
+.e-org{color:var(--accent);font-weight:600;}
+.e-extra{color:var(--muted);font-size:calc(var(--fs)*0.9);}
+.e-sub{color:var(--muted);font-size:calc(var(--fs)*0.88);margin-top:1px;display:flex;justify-content:space-between;gap:10px;}
+.e-loc{color:var(--muted);font-size:calc(var(--fs)*0.88);flex:none;}
+/* ---------- 经历标签 ---------- */
+.tags{display:flex;flex-wrap:wrap;gap:3px 5px;margin-top:3px;}
+.tag{background:var(--accent-soft);color:var(--ink);border-radius:2px;padding:0 5px;font-size:calc(var(--fs)*0.85);}
+/* ---------- 列表 ---------- */
+.bullets{margin:3px 0 0;padding-left:1.15em;}
+.bullets li{margin-bottom:2px;text-align:justify;}
+.bullets li:last-child{margin-bottom:0;}
+.plain-list{margin:0;padding-left:1.15em;}
+.plain-list li{margin-bottom:2px;}
+.plain-list.tight li{margin-bottom:1px;}
+.c-roles{color:var(--muted);}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.94em;background:var(--accent-soft);padding:0 3px;border-radius:2px;}
+/* ---------- 技能 chip ---------- */
+.sk-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:3px 10px;margin-bottom:3px;}
+.sk-row:last-child{margin-bottom:0;}
+.sk-cat{font-weight:600;min-width:64px;color:var(--ink);}
+.sk-items{display:flex;flex-wrap:wrap;gap:3px 5px;}
+.chip{background:var(--accent-soft);color:var(--ink);border-radius:2px;padding:0 5px;font-size:calc(var(--fs)*0.92);}
+/* ---------- 待补标记 ---------- */
+.needs-data{list-style:none;margin-left:-1.15em;}
+.todo{
+  display:inline-block;margin-left:4px;padding:0 5px;border-radius:2px;
+  background:#fff4e5;color:#b25e00;border:1px dashed #e8a33d;
+  font-size:calc(var(--fs)*0.85);
+}
+/* ---------- 打印 ---------- */
+@media print{
+  body{background:#fff;}
+  .page{width:auto;min-height:0;padding:0;}
+  .needs-data{break-inside:avoid;}
+  .entry,.sec{break-inside:avoid;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="hd">
+  
+  <div class="hd-main">
+    <div class="hd-top">
+      <h1 class="name">张示例</h1>
+      
+    </div>
+    <div class="headline">前端开发工程师</div>
+    <div class="target"><span class="t-label">求职意向</span><b>高级前端开发工程师</b></div>
+    <div class="contact"><span class="c-item">138****0000</span><span class="c-item">zhang@example.com</span><span class="c-item">上海</span><span class="c-item">github.com/zhang-example</span></div>
+  </div>
+</header>
+<section class="sec"><h2>个人简介</h2><p class="summary">3 年 B 端前端经验，专注复杂表单与数据可视化场景。主导过 2 个从零到一的后台系统，最大单应用日活 4 万。</p></section>
+<section class="sec"><h2>技术栈</h2><div class="sk-row"><span class="sk-cat">前端</span><span class="sk-items"><span class="chip">React</span><span class="chip">TypeScript</span><span class="chip">Vite</span><span class="chip">TailwindCSS</span></span></div><div class="sk-row"><span class="sk-cat">工程化</span><span class="sk-items"><span class="chip">Webpack</span><span class="chip">Vite</span><span class="chip">CI/CD</span><span class="chip">单元测试</span></span></div><div class="sk-row"><span class="sk-cat">后端协同</span><span class="sk-items"><span class="chip">Node.js</span><span class="chip">Redis</span><span class="chip">REST/GraphQL</span></span></div></section>
+<section class="sec"><h2>工作经历</h2><div class="entry"><div class="e-head"><span class="e-title">前端开发工程师</span><span class="e-org">某互联网公司</span></div><div class="e-sub"><span>2024.03 — 至今</span><span class="e-loc">上海</span></div><ul class="bullets"><li>用 Redis 缓存重构订单查询接口，P99 从 800ms 降到 120ms</li><li>主导数据看板从零到一，支撑 12 个业务方的日常决策</li><li class="needs-data">搭建前端监控体系，缩短线上问题定位时间<span class="todo">【待补：需要：问题定位时长的真实数据】</span></li></ul></div><div class="entry"><div class="e-head"><span class="e-title">前端开发实习生</span><span class="e-org">某创业公司</span></div><div class="e-sub"><span>2022.09 — 2026.06</span><span class="e-loc">上海</span></div><ul class="bullets"><li>独立完成 3 个营销活动页，最高单页 PV 8 万</li></ul></div></section>
+<section class="sec"><h2>项目经历</h2><div class="entry"><div class="e-head"><span class="e-title">运营数据看板</span><span class="e-org">某互联网公司</span><span class="e-extra">角色：前端负责人 · 技术栈：React + TypeScript + ECharts</span></div><div class="e-sub"><span>2025.07 — 2025.12</span><span class="e-loc"></span></div><ul class="bullets"><li>设计 14 个可配置看板模板，业务方自助配置覆盖率 70%</li><li>首屏加载耗时下降 40%</li></ul></div></section>
+<section class="sec"><h2>教育背景</h2><div class="entry"><div class="e-head"><span class="e-title">本科</span><span class="e-org">上海某大学</span><span class="e-extra">本科 · 计算机科学与技术 · GPA 3.6/4.0</span></div><div class="e-sub"><span>2022.09 — 2026.06</span><span class="e-loc">上海</span></div></div></section>
+<section class="sec"><h2>证书与荣誉</h2><ul class="plain-list"><li><strong>大学英语六级</strong> · 教育部考试中心 · 2024.06</li></ul></section>
+</div>
+</body>
+</html>

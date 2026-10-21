@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 本地产物：简历数据与渲染结果含个人信息，一律不进仓库
+resume.json
+raw.json
+working.json
+*.local.json
+resume.html
+resume.pdf
+avatar.*
+photo.*
+screenshots/
+
+# 编辑器与系统
+.DS_Store
+.idea/
+.vscode/
+*.swp

@@ -1,0 +1,92 @@
+{
+  "_comment": "raw.json = 事实清单，只增不删。投不同岗位时复制它生成新的 resume.json。",
+  "meta": {
+    "name": "张示例",
+    "headline": "前端开发工程师",
+    "contact": {
+      "phone": "138****0000",
+      "email": "zhang@example.com",
+      "city": "上海",
+      "wechat": "",
+      "portfolio": "",
+      "github": "github.com/zhang-example"
+    }
+  },
+  "fact_sheet": {
+    "companies": ["某互联网公司", "某创业公司"],
+    "schools": ["上海某大学"],
+    "roles": ["前端开发实习生", "前端开发工程师"],
+    "dates": ["2022.09", "2026.06", "2025.07", "2025.12", "2024.03", "2024.09"],
+    "metrics": [
+      {"value": "120ms", "context": "P99 接口延迟"},
+      {"value": "40%", "context": "首屏加载耗时下降"},
+      {"value": "4 万", "context": "日活用户"}
+    ],
+    "tools": ["React", "TypeScript", "Vite", "Redis"],
+    "vague_claims": ["效果挺好的", "多个业务方"]
+  },
+  "sections": {
+    "summary": [
+      {"text": "3 年 B 端前端经验，专注复杂表单与数据可视化场景。主导过 2 个从零到一的后台系统，最大单应用日活 4 万。"}
+    ],
+    "skills": [
+      {"category": "前端", "items": ["React", "TypeScript", "Vite", "TailwindCSS"]},
+      {"category": "工程化", "items": ["Webpack", "Vite", "CI/CD", "单元测试"]},
+      {"category": "后端协同", "items": ["Node.js", "Redis", "REST/GraphQL"]}
+    ],
+    "experience": [
+      {
+        "org": "某互联网公司",
+        "title": "前端开发工程师",
+        "location": "上海",
+        "start": "2024.03",
+        "end": "",
+        "bullets": [
+          {"text": "用 Redis 缓存重构订单查询接口，P99 从 800ms 降到 120ms", "needs_data": false},
+          {"text": "主导数据看板从零到一，支撑 12 个业务方的日常决策", "needs_data": false},
+          {"text": "搭建前端监控体系，线上问题定位时间从平均 2 小时缩短到 20 分钟", "needs_data": true, "data_hint": "需要：问题定位时长的真实数据"}
+        ]
+      },
+      {
+        "org": "某创业公司",
+        "title": "前端开发实习生",
+        "location": "上海",
+        "start": "2022.09",
+        "end": "2026.06",
+        "bullets": [
+          {"text": "独立完成 3 个营销活动页，最高单页 PV 8 万", "needs_data": false}
+        ]
+      }
+    ],
+    "projects": [
+      {
+        "title": "运营数据看板",
+        "org": "某互联网公司",
+        "role": "前端负责人",
+        "stack": "React + TypeScript + ECharts",
+        "start": "2025.07",
+        "end": "2025.12",
+        "location": "",
+        "bullets": [
+          {"text": "设计 14 个可配置看板模板，业务方自助配置覆盖率 70%", "needs_data": false},
+          {"text": "首屏加载耗时下降 40%", "needs_data": false}
+        ]
+      }
+    ],
+    "education": [
+      {
+        "school": "上海某大学",
+        "degree": "本科",
+        "major": "计算机科学与技术",
+        "start": "2022.09",
+        "end": "2026.06",
+        "location": "上海",
+        "gpa": "3.6/4.0",
+        "bullets": []
+      }
+    ],
+    "certificates": [
+      {"name": "大学英语六级", "issuer": "教育部考试中心", "date": "2024.06"}
+    ]
+  }
+}
