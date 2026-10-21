@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: 零依赖校验（仅允许标准库导入）
+        run: |
+          echo "检查 scripts/ 下的 import："
+          # 注意用 POSIX [[:space:]] 而非 \s —— BSD grep（macOS）不支持 \s，
+          # 会导致匹配结果为空、检查静默通过。
+          grep -hoE "^[[:space:]]*(import|from)[[:space:]]+[a-zA-Z_][a-zA-Z0-9_.]*" scripts/*.py \
+            | awk '{print $2}' | cut -d. -f1 | sort -u > imports.txt
+          cat imports.txt
+          # 允许清单：标准库 + 项目内模块
+          ALLOWED="__future__ argparse base64 html json mimetypes re sys unicodedata zipfile shutil subprocess pathlib themes"
+          for m in $(cat imports.txt); do
+            if ! echo " $ALLOWED " | grep -q " $m "; then
+              echo "::error::发现非标准库依赖 '$m' —— 本项目承诺零第三方依赖"
+              exit 1
+            fi
+          done
+          echo "✓ 零第三方依赖"
+
+      - name: 六套主题渲染
+        run: |
+          for t in tech product design finance engineering public; do
+            python3 scripts/render.py --data examples/resume.example.json \
+              --out "out-$t.html" --theme "$t"
+          done
+          echo "✓ 六套主题全部渲染成功"
+
+      - name: 反 AI 味与 ATS 质检（严格模式）
+        run: |
+          python3 scripts/lint.py --data examples/resume.example.json --strict
+          echo "✓ lint 通过，无 ERROR"
+
+      - name: 事实保真校验（严格模式）
+        run: |
+          python3 scripts/check_facts.py --data examples/resume.example.json \
+            --raw examples/raw.example.json --strict
+          echo "✓ 无无源声明"
+
+      - name: 简历结构自检
+        run: |
+          python3 - <<'PY'
+          import re, sys
+          h = open('out-tech.html', encoding='utf-8').read()
+          checks = {
+              "DOCTYPE": h.startswith('<!DOCTYPE html>'),
+              "单栏（无 table）": '<table' not in h,
+              "无文本框": 'textarea' not in h.lower(),
+              "纯文字（无图片承载文字）": '<img' not in h,
+              "A4 打印规则": '@page' in h and 'A4' in h,
+          }
+          for k, v in checks.items():
+              print(("  PASS " if v else "  FAIL ") + k)
+          if not all(checks.values()):
+              sys.exit(1)
+          print("✓ HTML 结构全部通过")
+          PY
+
+      - name: 上传渲染产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: rendered-resumes
+          path: out-*.html
