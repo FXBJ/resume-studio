@@ -10,6 +10,36 @@
 用自然语言描述你的经历，它产出**可直接投递的一页 PDF**。内置六套按行业大类划分的模板、
 事实保真闸门、反 AI 味体检，全部零第三方依赖。
 
+![应用截图](docs/app-screenshot.png)
+
+## 两种用法
+
+| 形态 | 适合 | 入口 |
+|---|---|---|
+| **网页应用** `app/` | 不想装任何东西，打开就能用 | 浏览器打开 `app/index.html`，或访问部署链接 |
+| **AI Skill** `scripts/` `references/` | 已经在用 Claude / Codex 等助手 | 把仓库链接发给助手：「帮我装这个 Skill，然后用它写简历」 |
+
+网页应用与 Skill **同源同规则**：同一套六主题定义、同一套体检词表、同一条 ATS 约束。
+改一边必须同步另一边（CI 会各自校验）。
+
+### 网页应用 · 30 秒上手
+
+```bash
+cd app
+python3 -m http.server 8000        # 或直接用浏览器打开 index.html
+# 访问 http://localhost:8000/?sample=1 可直接看示例效果
+```
+
+三栏布局：**左边录入 → 中间实时预览 → 右边体检报告**。
+
+- 六套行业模板一键切换，切换即重排模块顺序与配色
+- 自定义面板：主色、字号、密度、栏目标题样式、头像尺寸、模块开关与顺序
+- 头像本地读取，**不上传服务器**
+- 内容改动自动存 localStorage，刷新不丢
+- 「导出 PDF」走浏览器打印，A4 一页
+
+**`?sample=1` 会载入示例数据**，适合做演示链接。
+
 ---
 
 ## 为什么还要做一个
@@ -106,8 +136,14 @@ cp -R resume-studio ~/.agents/skills/
 
 ```
 resume-studio/
+├── app/                          # 网页应用（纯前端，零依赖）
+│   ├── index.html                # 三栏骨架
+│   ├── styles.css                # 应用外观（校勘仪方向）
+│   └── app.js                    # 状态 / 渲染 / 体检 / 交互
+├── tests/
+│   └── app.test.js               # 网页应用核心逻辑测试（33 项）
 ├── SKILL.md                     # 入口：模式路由 + 三条硬约束 + 命令速查
-├── scripts/                     # 全部零第三方依赖
+├── scripts/                     # Skill 侧脚本，全部零第三方依赖
 │   ├── themes.py                # 六套行业主题 + resolve_theme 白名单校验
 │   ├── render.py                # resume.json + theme → 单页自包含 HTML
 │   ├── lint.py                  # 反 AI 味 + ATS 风险 + 一页体积估算
@@ -125,8 +161,24 @@ resume-studio/
 │   ├── raw.example.json         # 事实清单示例
 │   ├── resume.example.json      # 投递快照示例
 │   └── demo/                    # 六套模板静态预览
-└── docs/design.md               # 完整设计方案与调研结论
+└── docs/
+    ├── design.md                # 完整设计方案与调研结论
+    └── app-screenshot.png       # 网页应用截图
 ```
+
+## 测试
+
+```bash
+# 网页应用核心逻辑（六主题 / ATS 结构 / 自定义覆盖 / 体检引擎 / 模块开关）
+node tests/app.test.js
+
+# Skill 侧脚本
+python3 scripts/render.py --data examples/resume.example.json --out /tmp/r.html
+python3 scripts/lint.py --data examples/resume.example.json --strict
+python3 scripts/check_facts.py --data examples/resume.example.json --raw examples/raw.example.json --strict
+```
+
+CI 会同时跑两侧，并额外校验 Python 3.9 语法兼容与零第三方依赖。
 
 ## 三条不可逾越的硬约束
 

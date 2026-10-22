@@ -16,6 +16,15 @@ jobs:
         with:
           python-version: "3.9"
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 网页应用核心逻辑测试
+        run: |
+          # 覆盖六主题渲染、ATS 结构、自定义覆盖、体检引擎、模块开关
+          node tests/app.test.js
+
       - name: Python 3.9 语法兼容性
         run: |
           # 项目声明支持 3.9+。用 ast.feature_version 提前拦截版本相关语法，

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>简历工坊 · Resume Studio</title>
+<meta name="description" content="一个专门抓「AI 味」和「编造数字」的简历工具。六套行业模板、实时预览、一键导出 PDF。">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ===================== 顶栏 ===================== -->
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">校</span>
+    <div class="brand-text">
+      <strong>简历工坊</strong>
+      <span>Resume Studio</span>
+    </div>
+  </div>
+
+  <p class="tagline">给简历挑错，而不只是生成简历</p>
+
+  <div class="topbar-actions">
+    <button type="button" class="btn btn-ghost" id="btn-sample">载入示例</button>
+    <button type="button" class="btn btn-ghost" id="btn-clear">清空</button>
+    <button type="button" class="btn btn-primary" id="btn-export">
+      <span class="btn-ico" aria-hidden="true">⤓</span>导出 PDF
+    </button>
+  </div>
+</header>
+
+<!-- ===================== 主体三栏 ===================== -->
+<main class="layout">
+
+  <!-- ---------- 左：录入 ---------- -->
+  <aside class="pane pane-form" aria-label="简历信息录入">
+    <div class="pane-head">
+      <h2>录入</h2>
+      <span class="pane-hint">改动即时生效，自动保存在本机</span>
+    </div>
+    <div class="pane-body" id="form-root"><!-- JS 渲染 --></div>
+  </aside>
+
+  <!-- ---------- 中：预览 ---------- -->
+  <section class="pane pane-stage" aria-label="简历预览">
+    <div class="stage-bar">
+      <div class="theme-switch" role="group" aria-label="行业模板">
+        <span class="sb-label">行业模板</span>
+        <div class="theme-btns" id="theme-btns"><!-- JS 渲染 --></div>
+      </div>
+      <div class="stage-bar-right">
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-tune" aria-expanded="false">
+          自定义<span class="caret" aria-hidden="true">▾</span>
+        </button>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-lint-toggle" aria-expanded="true">
+          体检<span class="lint-badge" id="lint-badge" hidden>0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 自定义面板（默认收起） -->
+    <div class="tune" id="tune-panel" hidden>
+      <div class="tune-grid">
+        <label class="field">
+          <span class="f-label">主色</span>
+          <span class="f-ctrl f-ctrl-row">
+            <input type="color" id="tune-accent">
+            <input type="text" id="tune-accent-text" class="input input-mono input-sm" spellcheck="false">
+            <button type="button" class="btn btn-ghost btn-xs" id="tune-accent-reset">用模板默认</button>
+          </span>
+        </label>
+
+        <label class="field">
+          <span class="f-label">字号 <b class="f-val" id="tune-fs-val">100%</b></span>
+          <span class="f-ctrl">
+            <input type="range" id="tune-fs" min="70" max="160" step="5" value="100">
+          </span>
+        </label>
+
+        <label class="field">
+          <span class="f-label">密度</span>
+          <span class="f-ctrl">
+            <select id="tune-density" class="input input-sm">
+              <option value="">模板默认</option>
+              <option value="compact">紧凑</option>
+              <option value="normal">适中</option>
+              <option value="relaxed">舒展</option>
+            </select>
+          </span>
+        </label>
+
+        <label class="field">
+          <span class="f-label">栏目标题样式</span>
+          <span class="f-ctrl">
+            <select id="tune-secstyle" class="input input-sm">
+              <option value="">模板默认</option>
+              <option value="bar">色块条</option>
+              <option value="underline">下划线</option>
+              <option value="plain">纯文字</option>
+              <option value="numbered">编号</option>
+            </select>
+          </span>
+        </label>
+
+        <label class="field">
+          <span class="f-label">头像</span>
+          <span class="f-ctrl f-ctrl-row">
+            <input type="checkbox" id="tune-photo" class="chk">
+            <span class="f-sub">显示</span>
+            <input type="number" id="tune-pw" class="input input-mono input-xs" min="12" max="45" title="宽 mm">
+            <span class="f-sub">×</span>
+            <input type="number" id="tune-ph" class="input input-mono input-xs" min="12" max="45" title="高 mm">
+            <span class="f-sub">mm</span>
+          </span>
+        </label>
+
+        <div class="field field-wide">
+          <span class="f-label">模块开关与顺序</span>
+          <div class="mod-order" id="mod-order"><!-- JS 渲染 --></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-scroll">
+      <div class="paper-wrap">
+        <iframe id="preview" title="简历预览" sandbox="allow-same-origin allow-modals"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- 右：体检 ---------- -->
+  <aside class="pane pane-lint" id="lint-pane" aria-label="简历体检">
+    <div class="pane-head">
+      <h2>体检</h2>
+      <span class="pane-hint">抓 AI 味与无据数字</span>
+    </div>
+    <div class="pane-body" id="lint-root"><!-- JS 渲染 --></div>
+  </aside>
+
+</main>
+
+<footer class="foot">
+  <span>简历工坊 · 纯前端单页应用，数据只存在你的浏览器里，不上传服务器</span>
+  <span class="foot-links">
+    <a href="https://github.com/FXBJ/resume-studio" target="_blank" rel="noopener">GitHub</a>
+  </span>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
