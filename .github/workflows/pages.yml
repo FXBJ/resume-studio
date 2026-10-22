@@ -1,0 +1,48 @@
+name: Deploy App
+
+# 把 app/ 目录发布到 GitHub Pages。
+# 之所以用 Actions 产物而不是 Pages 的「分支 + 目录」模式：
+# 后者只允许 / 和 /docs，而 /docs 已被设计文档占用。
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 发布前自检
+        run: |
+          set -e
+          for f in index.html app.js styles.css; do
+            test -s "app/$f" || { echo "缺少 app/$f"; exit 1; }
+          done
+          # 页面必须是自包含的静态资源，不能依赖构建步骤
+          grep -q 'src="app.js"' app/index.html
+          grep -q 'href="styles.css"' app/index.html
+          echo "自检通过"
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: app
+      - id: deployment
+        uses: actions/deploy-pages@v4
