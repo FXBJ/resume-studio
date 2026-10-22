@@ -1189,16 +1189,43 @@ function bindEvents() {
     if (frame.contentWindow) frame.contentWindow.print();
   });
 
-  // 体检面板开关（窄屏抽屉）
+  // 体检面板开关：中屏（861—1180）是侧滑抽屉，其余宽度直接显示/隐藏
   const lintPane = document.getElementById('lint-pane');
   document.getElementById('btn-lint-toggle').addEventListener('click', function () {
-    if (window.matchMedia('(max-width:1180px)').matches) {
-      lintPane.classList.toggle('is-open');
+    const isDrawer = window.matchMedia('(min-width:861px) and (max-width:1180px)').matches;
+    let expanded;
+    if (isDrawer) {
+      expanded = lintPane.classList.toggle('is-open');
     } else {
       lintPane.hidden = !lintPane.hidden;
+      expanded = !lintPane.hidden;
     }
-    this.setAttribute('aria-expanded', String(!lintPane.hidden));
+    this.setAttribute('aria-expanded', String(expanded));
   });
+
+  // 预览缩放：窄屏下保持 A4 原始宽度整体缩小，避免被压扁后截断
+  const mqNarrow = window.matchMedia('(max-width:860px)');
+  const fitPreview = function () {
+    const wrap = document.querySelector('.paper-wrap');
+    const scroller = document.querySelector('.stage-scroll');
+    if (!wrap || !scroller) return;
+    if (!mqNarrow.matches) {
+      wrap.style.transform = ''; wrap.style.marginBottom = '';
+      return;
+    }
+    const PW = 794;   // 210mm @96dpi
+    const PH = 1123;  // 297mm @96dpi
+    const avail = scroller.clientWidth - 24;
+    const s = Math.min(1, avail / PW);
+    const dx = Math.max(0, (avail - PW * s) / 2);
+    wrap.style.transform = 'translateX(' + dx + 'px) scale(' + s + ')';
+    // transform 不改变布局高度，用负边距把多占的空间收回来，
+    // 否则下方内容会与缩小后的预览之间空出一大块（或反过来重叠）
+    wrap.style.marginBottom = (-(PH * (1 - s))) + 'px';
+  };
+  fitPreview();
+  window.addEventListener('resize', debounce(fitPreview, 120));
+  if (mqNarrow.addEventListener) mqNarrow.addEventListener('change', fitPreview);
 }
 
 /* ============================== 14. 启动 ============================== */
@@ -1225,6 +1252,11 @@ function init() {
       el.style.transition = 'opacity 320ms cubic-bezier(.16,1,.3,1), transform 320ms cubic-bezier(.16,1,.3,1)';
       el.style.opacity = '1';
       el.style.transform = 'none';
+      // 动画结束后必须清掉内联样式：内联 transform:none 会压过媒体查询里
+      // 给体检面板设的 translateX(100%)，导致抽屉永远盖在预览区上
+      setTimeout(() => {
+        el.style.transition = ''; el.style.transform = ''; el.style.opacity = '';
+      }, 380);
     }, 60 + i * 90);
   });
 }

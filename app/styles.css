@@ -381,6 +381,9 @@ input[type="range"]{accent-color:var(--accent);width:100%;cursor:pointer;}
 .foot a{color:var(--accent);text-decoration:none;}
 .foot a:hover{text-decoration:underline;}
 
+/* hidden 属性必须能压过 .pane 的 display:flex，否则 JS 里 lintPane.hidden = true 是无效的 */
+[hidden]{display:none !important;}
+
 /* ============================== 响应式 ============================== */
 
 @media (max-width:1180px){
@@ -391,12 +394,23 @@ input[type="range"]{accent-color:var(--accent);width:100%;cursor:pointer;}
   .pane-lint.is-open{transform:none;}
 }
 @media (max-width:860px){
+  /* 顶栏允许折行，动作按钮占满第二行，避免右边被裁 */
+  .topbar{height:auto;min-height:56px;flex-wrap:wrap;gap:var(--sp-2);
+    padding:8px var(--sp-3);}
+  .tagline{display:none;}
+  .topbar-actions{width:100%;justify-content:flex-end;}
+
   .layout{grid-template-columns:1fr;height:auto;}
   .pane{height:auto;max-height:none;}
-  .pane-form .pane-body{max-height:60vh;}
-  .stage-scroll{padding:var(--sp-3);}
-  .paper-wrap{width:100%;}
-  .tagline{display:none;}
+  .pane-form .pane-body{max-height:70vh;}
+
+  /* 体检面板复位：不再是固定浮层，改为文档流中的一段 */
+  .pane-lint{position:static;width:auto;bottom:auto;z-index:auto;
+    box-shadow:none;transform:none;border-top:1px solid var(--rule);}
+
+  /* 预览保持 A4 原始宽度，由 JS 整体缩放，避免被压扁后截断 */
+  .stage-scroll{overflow-x:hidden;padding:var(--sp-3);}
+  .paper-wrap{width:210mm;max-width:none;margin:0;transform-origin:top left;}
 }
 
 /* ============================== 动效降级 ============================== */
