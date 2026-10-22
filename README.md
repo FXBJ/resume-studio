@@ -12,11 +12,13 @@
 
 ![应用截图](docs/app-screenshot.png)
 
+**在线体验 → https://fxbj.github.io/resume-studio/**（示例数据直链：`?sample=1`，无需登录、无需安装、不上传任何数据）
+
 ## 两种用法
 
 | 形态 | 适合 | 入口 |
 |---|---|---|
-| **网页应用** `app/` | 不想装任何东西，打开就能用 | 浏览器打开 `app/index.html`，或访问部署链接 |
+| **网页应用** `app/` | 不想装任何东西，打开就能用 | [在线体验](https://fxbj.github.io/resume-studio/) · 或本地打开 `app/index.html` |
 | **AI Skill** `scripts/` `references/` | 已经在用 Claude / Codex 等助手 | 把仓库链接发给助手：「帮我装这个 Skill，然后用它写简历」 |
 
 网页应用与 Skill **同源同规则**：同一套六主题定义、同一套体检词表、同一条 ATS 约束。
@@ -37,6 +39,7 @@ python3 -m http.server 8000        # 或直接用浏览器打开 index.html
 - 头像本地读取，**不上传服务器**
 - 内容改动自动存 localStorage，刷新不丢
 - 「导出 PDF」走浏览器打印，A4 一页
+- 手机可用：三栏自动折成单列，预览按 A4 原宽整体缩放，不压扁、不截断
 
 **`?sample=1` 会载入示例数据**，适合做演示链接。
 
@@ -70,6 +73,8 @@ python3 -m http.server 8000        # 或直接用浏览器打开 index.html
 | `finance` | 金融 / 咨询 / 法律 | 学历与证书前置，衬线，编号栏题 |
 | `engineering` | 制造 / 工程 / 医疗 / 基建 | 项目与技术规范前置，石墨蓝 |
 | `public` | 国企 / 事业 / 教育 / 公共部门 | 荣誉证书前置，绛红，庄重 |
+
+![六套模板对比](docs/templates.png)
 
 模板预览：打开 [`examples/demo/`](examples/demo/) 下任意 HTML 即可，无需安装任何东西。
 
